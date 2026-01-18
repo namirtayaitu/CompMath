@@ -2,17 +2,13 @@ import numpy as np
 
 
 def sor_method(A, b, omega, x0=None, epsilon=0.000001, max_iterations=100):
-    """
-    Solves Ax = b using Successive Over-Relaxation (SOR) method.
-    All output uses standard decimal format (no scientific notation).
-    """
+
     n = len(b)
     if x0 is None:
         x = np.zeros(n)
     else:
         x = np.array(x0, dtype=float)
 
-    # Check diagonal elements
     for i in range(n):
         if abs(A[i, i]) < 1e-12:
             raise ValueError(f"Diagonal element A[{i},{i}] is zero.")
@@ -37,7 +33,6 @@ def sor_method(A, b, omega, x0=None, epsilon=0.000001, max_iterations=100):
                 max_delta = delta_i
             x[i] = x_new_i
 
-        # Print current iterate
         print(
             f"{iteration:<5} "
             f"{x[0]:<12.8f} "
@@ -52,8 +47,6 @@ def sor_method(A, b, omega, x0=None, epsilon=0.000001, max_iterations=100):
 
     raise RuntimeError(f"Did not converge after {max_iterations} iterations")
 
-
-# Define original system
 A_orig = np.array([
     [3, -5, 47, 20],
     [11, 16, 17, 10],
@@ -62,13 +55,11 @@ A_orig = np.array([
 ])
 b_orig = np.array([18, 26, 34, 82])
 
-# Reorder for diagonal dominance: [2, 3, 0, 1]
 order = [2, 3, 0, 1]
 A = A_orig[order]
 b = b_orig[order]
 
-# SOR parameter
-omega = 1.25  # Over-relaxation (1 < ω < 2)
+omega = 1.25
 
 print("Solving using Successive Over-Relaxation (SOR) Method")
 print(f"Relaxation parameter ω = {omega:.2f}")
@@ -95,7 +86,6 @@ try:
     for i in range(4):
         print(f"x{i + 1} = {solution[i]:.8f}")
 
-    # Verify against ORIGINAL system
     Ax = A_orig @ solution
     residual = Ax - b_orig
     print("\nVerification against ORIGINAL system:")
