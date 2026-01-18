@@ -2,17 +2,13 @@ import numpy as np
 
 
 def jacobi_method(A, b, x0=None, epsilon=0.000001, max_iterations=100):
-    """
-    Solves Ax = b using Jacobi Iteration Method.
-    All output uses standard decimal format (no scientific notation).
-    """
+
     n = len(b)
     if x0 is None:
         x = np.zeros(n)
     else:
         x = np.array(x0, dtype=float)
 
-    # Check for zero on diagonal
     for i in range(n):
         if abs(A[i, i]) < 1e-12:
             raise ValueError(f"Diagonal element A[{i},{i}] is zero.")
@@ -28,11 +24,9 @@ def jacobi_method(A, b, x0=None, epsilon=0.000001, max_iterations=100):
             s = sum(A[i][j] * x_old[j] for j in range(n) if j != i)
             x_new[i] = (b[i] - s) / A[i, i]
 
-        # Compute max change
         delta = np.abs(x_new - x_old)
         max_delta = np.max(delta)
 
-        # Print current iterate
         print(
             f"{iteration:<5} "
             f"{x_new[0]:<12.8f} "
@@ -49,8 +43,6 @@ def jacobi_method(A, b, x0=None, epsilon=0.000001, max_iterations=100):
 
     raise RuntimeError(f"Did not converge after {max_iterations} iterations")
 
-
-# Define original system
 A_orig = np.array([
     [3, -5, 47, 20],
     [11, 16, 17, 10],
@@ -59,7 +51,6 @@ A_orig = np.array([
 ])
 b_orig = np.array([18, 26, 34, 82])
 
-# Reorder for better convergence: [2, 3, 0, 1] → rows 3,4,1,2 (0-indexed)
 order = [2, 3, 0, 1]
 A = A_orig[order]
 b = b_orig[order]
@@ -84,7 +75,6 @@ try:
     for i in range(4):
         print(f"x{i + 1} = {solution[i]:.8f}")
 
-    # Verify against ORIGINAL system (important!)
     residual = A_orig @ solution - b_orig
     print("\nVerification against ORIGINAL system:")
     print("A_original @ x =", " ".join(f"{val:12.8f}" for val in (A_orig @ solution)))
